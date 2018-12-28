@@ -1,0 +1,53 @@
+ext {
+    android = [
+            compileSdkVersion: 27,
+            minSdkVersion    : 19,
+            targetSdkVersion : 26,
+            applicationId    : "com.alfl.www",
+            versionCode      : 30000434,
+            versionName      : "4.3.4",
+            kotlinVersion    : "1.2.71"
+    ]
+    dependencies = [
+            junit              : 'junit:junit:4.12',
+            test               : 'com.android.support.test:runner:1.0.1',
+            espresso           : 'com.android.support.test.espresso:espresso-core:3.0.1',
+            design             : 'com.android.support:design:27.1.0',
+            supportV4          : 'com.android.support:support-v4:27.1.0',
+            appcompatV7        : 'com.android.support:appcompat-v7:27.1.0',
+            palette            : 'com.android.support:palette-v7:27.1.0',
+            percent            : 'com.android.support:percent:27.1.0',
+            cardview           : 'com.android.support:cardview-v7:27.1.0',
+            converterFastjson  : 'org.ligboy.retrofit2:converter-fastjson-android:2.1.0',
+            okhttp3integration : 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar',
+            retrofit2          : 'com.squareup.retrofit2:retrofit:2.1.0',
+            httpcore           : 'org.apache.httpcomponents:httpcore:4.4.4',
+            jpush              : 'cn.jiguang.sdk:jpush:3.1.5',
+            // 此处以JPush 3.0.5 版本为例。
+            jcore              : 'cn.jiguang.sdk:jcore:1.2.3',
+            // 此处以JCore 1.1.2 版本为例。
+            huawei             : 'cn.jiguang.sdk.plugin:huawei:3.1.5',
+            //    glide : project(':libptr')
+            //
+            eventbus           : 'org.greenrobot:eventbus:3.0.0',
+            subsampling        : 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0',
+            // annotationProcessor  'org.greenrobot:eventbus-annotation-processor:3.0.1'
+            decor              : 'me.everything:overscroll-decor-android:1.0.4',
+            SmartRefreshLayout : 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4',
+
+            zxing              : 'com.google.zxing:core:3.3.0',
+            roundedimageview   : 'com.makeramen:roundedimageview:2.3.0',
+            phontoView         : 'com.bm.photoview:library:1.4.1',
+            //rxbinding
+            rxbinding2         : 'com.jakewharton.rxbinding2:rxbinding:2.1.0',
+            rxbinding2Support  : 'com.jakewharton.rxbinding2:rxbinding-support-v4:2.1.0',
+            rxbinding2Appcompat: 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.1.0',
+            gson               : 'com.google.code.gson:gson:2.8.1',
+            lottie             : 'com.airbnb.android:lottie:2.2.5',
+            picasso            : 'com.squareup.picasso:picasso:2.5.2',
+            annotations        : 'com.android.support:support-annotations:26.0.0',
+            aspectj            : 'org.aspectj:aspectjrt:1.8.13',
+            pickerView         : 'com.contrarywind:Android-PickerView:4.1.3'
+    ]
+
+}
