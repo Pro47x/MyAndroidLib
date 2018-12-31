@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import com.framework.core.config.AlaConfig;
 
 /**
  * 单位转换类

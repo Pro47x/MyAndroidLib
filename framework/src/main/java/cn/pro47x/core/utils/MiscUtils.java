@@ -1256,7 +1256,9 @@ public class MiscUtils {
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setBlockNetworkImage(false);//解决图片不显示
         //可以让h5调用播放器自动播放
-        webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }

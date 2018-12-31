@@ -3,7 +3,9 @@ package cn.pro47x.core.utils;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
+import cn.pro47x.core.config.AppConfig;
 import cn.pro47x.core.entity.AreaData;
+import cn.pro47x.core.utils.log.Logger;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -248,7 +250,7 @@ public class CityDbUtils {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             file = DataUtils.createIfNotExists("databases/" + DB_NAME);
         } else {
-            file = new File("/data/data/" + AlaConfig.getPackageName() + "/databases/" + DB_NAME);
+            file = new File("/data/data/" + AppConfig.getPackageName() + "/databases/" + DB_NAME);
         }
         return file;
     }

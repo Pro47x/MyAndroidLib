@@ -80,7 +80,7 @@ public class AppConfig {
         localBroadcastManager = LocalBroadcastManager.getInstance(application);
         // 首先是生成线程池，最多10个线程,最少1个，闲置1分钟后线程退出
         es = Executors.newFixedThreadPool(10);
-        AlaConfig.application = application;
+        AppConfig.application = application;
         // 调用此方法触发保存的动作
         getFirstLaunchTime();
         // 用于监听APP是否到后台
@@ -91,7 +91,7 @@ public class AppConfig {
 
         handler = new Handler(Looper.getMainLooper());
         //获取上次的审核状态
-        AlaConfig.readRevState();
+        AppConfig.readRevState();
         blockQueue = new LinkedBlockingQueue<>();
         startTakeMaidianInfoThread();
     }
@@ -249,7 +249,7 @@ public class AppConfig {
     }
 
     public static void setDebug(boolean debug) {
-        AlaConfig.debug = debug;
+        AppConfig.debug = debug;
     }
 
     public static String getPackageName() {
@@ -277,7 +277,7 @@ public class AppConfig {
     }
 
     public static void setActivityLeavedLongListener(ActivityLeavedLongListener activityLeavedLongListener) {
-        AlaConfig.activityLeavedLongListener = activityLeavedLongListener;
+        AppConfig.activityLeavedLongListener = activityLeavedLongListener;
     }
 
     public static UserCityProvider getUserCityProvider() {
@@ -285,7 +285,7 @@ public class AppConfig {
     }
 
     public static void setUserCityProvider(UserCityProvider userCityProvider) {
-        AlaConfig.userCityProvider = userCityProvider;
+        AppConfig.userCityProvider = userCityProvider;
     }
 
     public static ServerProvider getServerProvider() {
@@ -293,7 +293,7 @@ public class AppConfig {
     }
 
     public static void setServerProvider(ServerProvider serverProvider) {
-        AlaConfig.serverProvider = serverProvider;
+        AppConfig.serverProvider = serverProvider;
     }
 
     public static AccountProvider getAccountProvider() {
@@ -301,7 +301,7 @@ public class AppConfig {
     }
 
     public static void setAccountProvider(AccountProvider accountProvider) {
-        AlaConfig.accountProvider = accountProvider;
+        AppConfig.accountProvider = accountProvider;
         RDClient.getInstance().updateRetrofit(new BasicParamsInterceptor.Builder().build());
     }
 
@@ -327,13 +327,13 @@ public class AppConfig {
     }
 
     public static void setIsRevView(boolean isRevView) {
-        AlaConfig.isRevView = isRevView;
+        AppConfig.isRevView = isRevView;
         SPUtil.setValue("isForAuth", isRevView);
     }
 
     public static void readRevState() {
         Object isForAuth = SPUtil.getValue("isForAuth");
-        if (isForAuth != null) AlaConfig.isRevView = (boolean) isForAuth;
+        if (isForAuth != null) AppConfig.isRevView = (boolean) isForAuth;
     }
 
     public static boolean isRevView() {
@@ -342,7 +342,7 @@ public class AppConfig {
 
 
     public static void setIsShowTips(boolean isShowTips) {
-        AlaConfig.isShowTips = isShowTips;
+        AppConfig.isShowTips = isShowTips;
     }
 
     public static boolean isShowTips() {
@@ -350,7 +350,7 @@ public class AppConfig {
     }
 
     public static void setIsFirstEntrance(boolean isFirstEntrance) {
-        AlaConfig.isFirstEntrance = isFirstEntrance;
+        AppConfig.isFirstEntrance = isFirstEntrance;
     }
 
     public static boolean getIsFirstEntrance() {
@@ -362,7 +362,7 @@ public class AppConfig {
 //    }
 
 //    public static void setIsNewHome(boolean isNewHome) {
-//        AlaConfig.isNewHome = isNewHome;
+//        AppConfig.isNewHome = isNewHome;
 //    }
 
     //是否下载过借贷超人
