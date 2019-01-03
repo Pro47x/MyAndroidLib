@@ -3,22 +3,16 @@ package cn.pro47x.core.config;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import com.framework.core.network.RDClient;
-import com.framework.core.network.interceptor.BasicParamsInterceptor;
-import com.framework.core.receiver.GestureLockWatcher;
-import com.framework.core.utils.DataUtils;
-import com.framework.core.utils.InfoUtils;
-import com.framework.core.utils.MiscUtils;
-import com.framework.core.utils.SPUtil;
+import cn.pro47x.core.receiver.GestureLockWatcher;
+import cn.pro47x.core.utils.DataUtils;
+import cn.pro47x.core.utils.InfoUtils;
+import cn.pro47x.core.utils.MiscUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -41,7 +35,6 @@ public class AppConfig {
     private static final String ALA_CORE_SHARED_PREFERENCE_DATA = "_sp.fw.core.config_";
     public static final String ALA_MAIDIAN_INFO_FILE_NAME = "maidianInfo.txt";
     private static WeakReference<Activity> currentActivity;// 当前正在显示的Activity
-    private static boolean debug = true;//是否在调试模式下
     /**
      * 必须需要显式设置
      */
@@ -54,23 +47,16 @@ public class AppConfig {
      * 主线程的handler，用于方便post一些事情做主线程去做
      */
     private static Handler handler;
-    private static ActivityLeavedLongListener activityLeavedLongListener;
-    private static UserCityProvider userCityProvider;
-    private static ServerProvider serverProvider;
-    private static AccountProvider accountProvider;
     private static LocalBroadcastManager localBroadcastManager;
-    private static LinkedBlockingQueue<String> blockQueue;//阻塞队列
+    /**
+     * 阻塞队列
+     */
+    private static LinkedBlockingQueue<String> blockQueue;
     /**
      * 用于监听APP是否到后台
      */
     private static GestureLockWatcher watcher;
-    /**
-     * 用户是否登录
-     */
-    private static boolean isLand = false;
 
-    //审核状态,默认是审核版
-    private static boolean isRevView = true;
     private static boolean isShowTips = true;
     private static boolean isFirstEntrance = true;
     private static Thread maidianInfoThread;
@@ -83,15 +69,8 @@ public class AppConfig {
         AppConfig.application = application;
         // 调用此方法触发保存的动作
         getFirstLaunchTime();
-        // 用于监听APP是否到后台
-//        watcher = new GestureLockWatcher(application);
-//        watcher.setOnScreenPressedListener(() -> {
-//        });
-//        watcher.startWatch();
 
         handler = new Handler(Looper.getMainLooper());
-        //获取上次的审核状态
-        AppConfig.readRevState();
         blockQueue = new LinkedBlockingQueue<>();
         startTakeMaidianInfoThread();
     }
@@ -244,14 +223,6 @@ public class AppConfig {
         editor.commit();
     }
 
-    public static boolean isDebug() {
-        return debug;
-    }
-
-    public static void setDebug(boolean debug) {
-        AppConfig.debug = debug;
-    }
-
     public static String getPackageName() {
         Context context = getContext();
         if (context != null) {
@@ -270,83 +241,6 @@ public class AppConfig {
 
     public static GestureLockWatcher getWatcher() {
         return watcher;
-    }
-
-    public static ActivityLeavedLongListener getActivityLeavedLongListener() {
-        return activityLeavedLongListener;
-    }
-
-    public static void setActivityLeavedLongListener(ActivityLeavedLongListener activityLeavedLongListener) {
-        AppConfig.activityLeavedLongListener = activityLeavedLongListener;
-    }
-
-    public static UserCityProvider getUserCityProvider() {
-        return userCityProvider;
-    }
-
-    public static void setUserCityProvider(UserCityProvider userCityProvider) {
-        AppConfig.userCityProvider = userCityProvider;
-    }
-
-    public static ServerProvider getServerProvider() {
-        return serverProvider;
-    }
-
-    public static void setServerProvider(ServerProvider serverProvider) {
-        AppConfig.serverProvider = serverProvider;
-    }
-
-    public static AccountProvider getAccountProvider() {
-        return accountProvider;
-    }
-
-    public static void setAccountProvider(AccountProvider accountProvider) {
-        AppConfig.accountProvider = accountProvider;
-        RDClient.getInstance().updateRetrofit(new BasicParamsInterceptor.Builder().build());
-    }
-
-    /**
-     * 更新登录状态
-     * 必须在 SharedPreferences 之后
-     * isLand  true 表示登录， false 表示未登录
-     */
-    public static void updateLand(boolean isLand) {
-        setLand(isLand);
-        RDClient.getInstance().updateRetrofit(new BasicParamsInterceptor.Builder().build());
-    }
-
-    public static boolean isLand() {
-        return isLand;
-    }
-
-    public static void setLand(boolean land) {
-        isLand = land;
-        if (!isLand) {
-            setTagAlias(false);
-        }
-    }
-
-    public static void setIsRevView(boolean isRevView) {
-        AppConfig.isRevView = isRevView;
-        SPUtil.setValue("isForAuth", isRevView);
-    }
-
-    public static void readRevState() {
-        Object isForAuth = SPUtil.getValue("isForAuth");
-        if (isForAuth != null) AppConfig.isRevView = (boolean) isForAuth;
-    }
-
-    public static boolean isRevView() {
-        return isRevView;
-    }
-
-
-    public static void setIsShowTips(boolean isShowTips) {
-        AppConfig.isShowTips = isShowTips;
-    }
-
-    public static boolean isShowTips() {
-        return isShowTips;
     }
 
     public static void setIsFirstEntrance(boolean isFirstEntrance) {
@@ -403,34 +297,5 @@ public class AppConfig {
     public static boolean geBoolean(String key) {
         SharedPreferences prefs = application.getSharedPreferences(ALA_CORE_SHARED_PREFERENCE_DATA, Application.MODE_PRIVATE);
         return prefs.getBoolean(key, false);
-    }
-
-    public static boolean openFullScreenFragment(Class<? extends Fragment> fragmentClz) {
-        return openFullScreenFragment(fragmentClz, null);
-    }
-
-    public static boolean openFullScreenFragment(Class<? extends Fragment> fragmentClz, Bundle bundle) {
-        return openFullScreenFragment(fragmentClz, bundle, true);
-    }
-
-    /**
-     * 打开一个全屏的fragment
-     *
-     * @return
-     */
-    public static boolean openFullScreenFragment(Class<? extends Fragment> fragmentClz, Bundle bundle, boolean add) {
-        Activity currentActivity = getCurrentActivity();
-        if (currentActivity instanceof FragmentEngineActivity) {
-            ((FragmentEngineActivity) currentActivity).openFullScreenFragment(Fragment.instantiate(currentActivity, fragmentClz.getName(), bundle), add);
-        } else if (currentActivity != null) {
-            Intent intent = new Intent(currentActivity, FragmentEngineActivity.class);
-            intent.setAction(FragmentEngineActivity.ACTION_OPEN_NEW_FRAGMENT);
-            intent.putExtra(FragmentEngineActivity.KEY_FRAGMENT_NAME, fragmentClz.getName());
-            intent.putExtra(FragmentEngineActivity.KEY_FRAGMENT_DATA, bundle);
-            currentActivity.startActivity(intent);
-        } else {
-            return false;
-        }
-        return true;
     }
 }

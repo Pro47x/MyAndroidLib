@@ -14,6 +14,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
+import cn.pro47x.core.config.AppConfig;
+import cn.pro47x.core.utils.log.Logger;
 
 import java.io.*;
 import java.lang.ref.WeakReference;
@@ -89,7 +91,7 @@ public class DataUtils {
         InputStream is = null;
         try {
             DisplayMetrics dm = getCurrentDisplayMetrics();
-            is = AlaConfig.getContext().getAssets().open(filePath);
+            is = AppConfig.getContext().getAssets().open(filePath);
             Options opts = new Options();
             opts.inDensity = 160;
             opts.inTargetDensity = dm.densityDpi;
@@ -130,7 +132,7 @@ public class DataUtils {
 
     public static DisplayMetrics getCurrentDisplayMetrics() {
         DisplayMetrics dm = new DisplayMetrics();
-        WindowManager wm = (WindowManager) AlaConfig.getContext().getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) AppConfig.getContext().getSystemService(Context.WINDOW_SERVICE);
         wm.getDefaultDisplay().getMetrics(dm);
         return dm;
     }
@@ -177,7 +179,7 @@ public class DataUtils {
     }
 
     public static File createIfNotExistsOnPhone(String fileName) {
-        File file = AlaConfig.getContext().getFileStreamPath(fileName);
+        File file = AppConfig.getContext().getFileStreamPath(fileName);
         if (file != null) {
             try {
                 file.getParentFile().mkdirs();
@@ -198,7 +200,7 @@ public class DataUtils {
     }
 
     public static File createDirIfNotExistsOnPhone(String dirName) {
-        File file = AlaConfig.getContext().getDir(dirName, Context.MODE_PRIVATE);
+        File file = AppConfig.getContext().getDir(dirName, Context.MODE_PRIVATE);
         if (file != null) {
             try {
                 file.mkdirs();
@@ -212,7 +214,7 @@ public class DataUtils {
     public static File createIfNotExistsOnSDCard(String fileName) {
         if (MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             File file = new File(Environment.getExternalStorageDirectory(),
-                    "/Android/data/" + AlaConfig.getContext().getPackageName() + "/files/" + fileName);
+                    "/Android/data/" + AppConfig.getContext().getPackageName() + "/files/" + fileName);
             if (file != null) {
                 try {
                     file.getParentFile().mkdirs();
@@ -229,7 +231,7 @@ public class DataUtils {
     public static File createDirIfNotExistsOnSDCard(String dirName) {
         if (MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             File file = new File(Environment.getExternalStorageDirectory(),
-                    "/Android/data/" + AlaConfig.getContext().getPackageName() + "/files/" + dirName);
+                    "/Android/data/" + AppConfig.getContext().getPackageName() + "/files/" + dirName);
             if (file != null) {
                 try {
                     file.mkdirs();
@@ -271,9 +273,9 @@ public class DataUtils {
         File file = null;
         if (MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             file = new File(Environment.getExternalStorageDirectory(),
-                    "/Android/data/" + AlaConfig.getContext().getPackageName() + "/files/" + externalFileName);
+                    "/Android/data/" + AppConfig.getContext().getPackageName() + "/files/" + externalFileName);
         } else {
-            file = AlaConfig.getContext().getFileStreamPath("/" + externalFileName);
+            file = AppConfig.getContext().getFileStreamPath("/" + externalFileName);
         }
         if (file != null) {
 //            /**
@@ -448,7 +450,7 @@ public class DataUtils {
             if (externalFile != null && externalFile.length() > 0) {
                 is = new FileInputStream(externalFile);
             } else {
-                is = AlaConfig.getContext().getAssets().open(assetFileName);
+                is = AppConfig.getContext().getAssets().open(assetFileName);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -500,7 +502,7 @@ public class DataUtils {
     public static final String readAssetFileContent(String filePath) {
         InputStream is = null;
         try {
-            is = AlaConfig.getContext().getAssets().open(filePath);
+            is = AppConfig.getContext().getAssets().open(filePath);
             String content = readFromStream(is, "UTF-8");
             return content;
         } catch (Exception ex) {
@@ -546,7 +548,7 @@ public class DataUtils {
     public static File checkSDFile(String fileName) {
         if (MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             File file = new File(Environment.getExternalStorageDirectory(),
-                    "/Android/data/" + AlaConfig.getContext().getPackageName() + "/files/" + fileName);
+                    "/Android/data/" + AppConfig.getContext().getPackageName() + "/files/" + fileName);
             if (file != null && file.exists()) {
                 return file;
             }
@@ -555,7 +557,7 @@ public class DataUtils {
     }
 
     public static File checkPhoneFile(String fileName) {
-        File file = AlaConfig.getContext().getFileStreamPath(fileName);
+        File file = AppConfig.getContext().getFileStreamPath(fileName);
         if (file != null && file.exists()) {
             return file;
         }
@@ -563,12 +565,12 @@ public class DataUtils {
     }
 
     public static String getPhoneAppPath() {
-        return AlaConfig.getContext().getFilesDir().getPath();
+        return AppConfig.getContext().getFilesDir().getPath();
     }
 
     public static String getSDCardAppPath() {
         File file = new File(Environment.getExternalStorageDirectory(),
-                "/Android/data/" + AlaConfig.getContext().getPackageName());
+                "/Android/data/" + AppConfig.getContext().getPackageName());
         return file.getPath();
     }
 
@@ -611,7 +613,7 @@ public class DataUtils {
     }
 
     private static File getSaveFile(String key) {
-        return new File(AlaConfig.getContext().getCacheDir(), key);
+        return new File(AppConfig.getContext().getCacheDir(), key);
     }
 
 

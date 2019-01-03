@@ -5,10 +5,10 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 import android.util.SparseArray;
-import com.framework.core.BuildConfig;
-import com.framework.core.config.AlaConfig;
-import com.framework.core.utils.DataUtils;
-import com.framework.core.utils.PermissionCheck;
+import cn.pro47x.core.BuildConfig;
+import cn.pro47x.core.config.AppConfig;
+import cn.pro47x.core.utils.DataUtils;
+import cn.pro47x.core.utils.PermissionCheck;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -128,7 +128,7 @@ public final class Logger {
      * Write log file to the SDCard
      */
     private static void writeLog(int type, String msg) {
-        Context context = AlaConfig.getContext();
+        Context context = AppConfig.getContext();
         // 如果没有读写SD卡的权限，则不写入文件
         if (null != context && !PermissionCheck.getInstance().checkPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             return;

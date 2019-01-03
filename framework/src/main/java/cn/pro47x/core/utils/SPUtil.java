@@ -4,13 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.text.TextUtils;
+import cn.pro47x.core.config.AppConfig;
+import cn.pro47x.core.utils.encryption.des.ThreeDESUtil;
 import com.alibaba.fastjson.JSON;
-import com.framework.core.config.AlaConfig;
-import com.framework.core.utils.encryption.des.ThreeDESUtil;
-import com.framework.core.utils.ref.RefException;
-import com.framework.core.utils.ref.RefObject;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,7 +31,7 @@ public class SPUtil {
     private final static String SP_NAME = "_sp.fw.core.sp.util_";
 
     private SPUtil() {
-        context = AlaConfig.getContext();
+        context = AppConfig.getContext();
         sp = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
     }
 
@@ -202,21 +199,6 @@ public class SPUtil {
      * 保存指定对象至 SharedPreferences
      */
     public static void setObject(Object obj) {
-        try {
-            RefObject object = RefObject.wrap(obj);
-            List<RefObject> list = object.getAll();
-            for (RefObject field : list) {
-                Object value = field.unwrap();
-                if (value != null) {
-                    setValue(field.getName(), field.unwrap());
-                } else {
-                    // 值为空时，清除
-                    remove(field.getName());
-                }
-            }
-        } catch (RefException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -225,21 +207,6 @@ public class SPUtil {
      * @return T
      */
     public static <T> T getObject(Class<T> clazz) {
-        try {
-            T obj = clazz.newInstance();
-            RefObject object = RefObject.wrap(obj);
-            List<RefObject> list = object.getAll();
-            for (RefObject field : list) {
-                Object value = getValue(field.getName());
-                //当值为null时不予赋值
-                if (value != null) {
-                    field.set(getValue(field.getName()));
-                }
-            }
-            return obj;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return null;
     }
 
@@ -377,7 +344,7 @@ public class SPUtil {
      */
     private static <T> T str2obj(final String string, final Class<T> clazz) {
         try {
-            return  JSON.parseObject(string, clazz);
+            return JSON.parseObject(string, clazz);
         } catch (Exception e) {
             e.printStackTrace();
         }

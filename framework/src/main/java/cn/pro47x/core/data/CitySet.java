@@ -2,7 +2,7 @@ package cn.pro47x.core.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.framework.core.utils.MiscUtils;
+import cn.pro47x.core.utils.MiscUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -94,6 +94,7 @@ public class CitySet implements Serializable, Parcelable {
         this.cityList = cityList;
     }
 
+    @Override
     public String toString() {
         return label + ":" + cityList;
     }

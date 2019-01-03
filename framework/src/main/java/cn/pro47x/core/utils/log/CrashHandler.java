@@ -10,7 +10,12 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Looper;
+import cn.pro47x.core.BuildConfig;
+import cn.pro47x.core.config.AppConfig;
+import cn.pro47x.core.utils.ActivityUtils;
 import cn.pro47x.core.utils.DataUtils;
+import cn.pro47x.core.utils.PermissionCheck;
+import cn.pro47x.core.utils.SPUtil;
 
 import java.io.*;
 import java.lang.Thread.UncaughtExceptionHandler;
@@ -82,7 +87,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
             e.printStackTrace();
         }
 
-        if (AlaConfig.isDebug()) {
+        if (BuildConfig.DEBUG) {
             // 打印出当前调用栈信息
 //            ex.printStackTrace();
             new Thread(() -> {
@@ -112,7 +117,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
     }
 
     private void dumpExceptionToSDCard(Throwable ex) throws IOException {
-        Context context = AlaConfig.getContext();
+        Context context = AppConfig.getContext();
         // 如果没有读写SD卡的权限，则不写入文件
         if (null != context && !PermissionCheck.getInstance()
                 .checkPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {

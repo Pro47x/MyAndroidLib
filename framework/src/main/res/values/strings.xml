@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">framework</string>
+    <string name="app_exit">再按一次退出程序</string>
+
+    <string name="confirm">确认</string>
+    <string name="cancel">取消</string>
+
+    <string name="permission_name_camera">为了能更好的使用本应用，请授予摄像头权限。</string>
+    <string name="permission_name_location">为了能更好的使用本应用，请开启定位权限。</string>
+    <string name="permission_name_sd">为了能更好的使用本应用，请开启SD卡读写权限。</string>
+    <string name="permission_settings">去设置</string>
+
 </resources>

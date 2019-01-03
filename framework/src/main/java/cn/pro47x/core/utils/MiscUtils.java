@@ -231,23 +231,6 @@ public class MiscUtils {
         return matcherTow.matches() || matcher.matches();
     }
 
-    public static void onTelEvent(String webViewUrl) {
-        StatisticsUtils.onEvent(AppConfig.getContext(), "tel", "all-" + getHost(webViewUrl));
-    }
-
-    public static void onConfirmTelEvent(String webViewUrl) {
-        StatisticsUtils.onEvent(AppConfig.getContext(), "tel", "confirm-" + getHost(webViewUrl));
-    }
-
-    public static void onCancelTelEvent(String webViewUrl) {
-        StatisticsUtils.onEvent(AppConfig.getContext(), "tel", "cancel-" + getHost(webViewUrl));
-    }
-
-    public static void onInterceptTelEvent(String webViewUrl) {
-        StatisticsUtils.onEvent(AppConfig.getContext(), "tel", "intercept-" + getHost(webViewUrl));
-    }
-
-
     public static int getCurrentYear() {
         Calendar cal = Calendar.getInstance();
         return cal.get(Calendar.YEAR);
