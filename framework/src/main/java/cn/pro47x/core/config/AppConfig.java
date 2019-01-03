@@ -29,10 +29,7 @@ import java.util.concurrent.*;
  * @date 2018-12-28 11:12:06
  */
 public class AppConfig {
-    public static final String ACTION_API_OPEN = "com.framework.core.api.err.open";
-    public static final String EXTRA_ERR_CODE = "__extra__api_err_code__";
-    public static final String EXTRA_ERR_MSG = "__extra__api_err_msg__";
-    private static final String ALA_CORE_SHARED_PREFERENCE_DATA = "_sp.fw.core.config_";
+    private static final String APP_CORE_DATA = "_sp.pro47x.core.config_";
     public static final String ALA_MAIDIAN_INFO_FILE_NAME = "maidianInfo.txt";
     private static WeakReference<Activity> currentActivity;// 当前正在显示的Activity
     /**
@@ -57,11 +54,6 @@ public class AppConfig {
      */
     private static GestureLockWatcher watcher;
 
-    private static boolean isShowTips = true;
-    private static boolean isFirstEntrance = true;
-    private static Thread maidianInfoThread;
-    //    private static boolean isNewHome = false;//是否是新版首页
-
     public static void init(Application application) {
         localBroadcastManager = LocalBroadcastManager.getInstance(application);
         // 首先是生成线程池，最多10个线程,最少1个，闲置1分钟后线程退出
@@ -72,27 +64,6 @@ public class AppConfig {
 
         handler = new Handler(Looper.getMainLooper());
         blockQueue = new LinkedBlockingQueue<>();
-        startTakeMaidianInfoThread();
-    }
-
-    /**
-     * 开启全局的一个保存埋点信息的线程
-     */
-    public static void startTakeMaidianInfoThread() {
-        if (maidianInfoThread != null) return;
-        maidianInfoThread = new Thread(() -> {
-            while (true) {
-                try {
-                    //take方法阻塞,有值就去保存
-                    String maidianInfo = blockQueue.take();
-                    File file = DataUtils.createIfNotExistsOnPhone(ALA_MAIDIAN_INFO_FILE_NAME);
-                    DataUtils.saveToFileCanAppend(maidianInfo, file);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        maidianInfoThread.start();
     }
 
     public static void putMaidianInfo(String info) {
@@ -115,10 +86,6 @@ public class AppConfig {
         return localBroadcastManager;
     }
 
-    public static <T> Future<T> submit(Callable<T> call) {
-        return es.submit(call);
-    }
-
     public static void postOnUiThread(Runnable task) {
         handler.post(task);
     }
@@ -136,7 +103,7 @@ public class AppConfig {
     }
 
     public static int addLaunchVersionCount() {
-        SharedPreferences prefs = application.getSharedPreferences(ALA_CORE_SHARED_PREFERENCE_DATA, Application.MODE_PRIVATE);
+        SharedPreferences prefs = application.getSharedPreferences(APP_CORE_DATA, Application.MODE_PRIVATE);
         String key = "lc" + InfoUtils.getVersionCode();
         int count = prefs.getInt(key, 0) + 1;
         Editor editor = prefs.edit();
@@ -146,13 +113,13 @@ public class AppConfig {
     }
 
     public static int getLaunchVersionCount() {
-        SharedPreferences prefs = application.getSharedPreferences(ALA_CORE_SHARED_PREFERENCE_DATA, Application.MODE_PRIVATE);
+        SharedPreferences prefs = application.getSharedPreferences(APP_CORE_DATA, Application.MODE_PRIVATE);
         String key = "lc" + InfoUtils.getVersionCode();
         return prefs.getInt(key, 0);
     }
 
     public static int addLaunchCount() {
-        SharedPreferences prefs = application.getSharedPreferences(ALA_CORE_SHARED_PREFERENCE_DATA, Application.MODE_PRIVATE);
+        SharedPreferences prefs = application.getSharedPreferences(APP_CORE_DATA, Application.MODE_PRIVATE);
         int count = prefs.getInt("lc", 0) + 1;
         Editor editor = prefs.edit();
         editor.putInt("lc", count);
@@ -161,29 +128,29 @@ public class AppConfig {
     }
 
     public static int getLaunchCount() {
-        SharedPreferences prefs = application.getSharedPreferences(ALA_CORE_SHARED_PREFERENCE_DATA, Application.MODE_PRIVATE);
+        SharedPreferences prefs = application.getSharedPreferences(APP_CORE_DATA, Application.MODE_PRIVATE);
         return prefs.getInt("lc", 0);
     }
 
     public static long getLastAdTime() {
-        SharedPreferences prefs = application.getSharedPreferences(ALA_CORE_SHARED_PREFERENCE_DATA, Application.MODE_PRIVATE);
+        SharedPreferences prefs = application.getSharedPreferences(APP_CORE_DATA, Application.MODE_PRIVATE);
         return prefs.getLong("lastATime", -1L);
     }
 
     public static void updateLastAdTime() {
-        SharedPreferences prefs = application.getSharedPreferences(ALA_CORE_SHARED_PREFERENCE_DATA, Application.MODE_PRIVATE);
+        SharedPreferences prefs = application.getSharedPreferences(APP_CORE_DATA, Application.MODE_PRIVATE);
         Editor editor = prefs.edit();
         editor.putLong("lastATime", System.currentTimeMillis());
         editor.commit();
     }
 
     public static long getLastPauseTime() {
-        SharedPreferences prefs = application.getSharedPreferences(ALA_CORE_SHARED_PREFERENCE_DATA, Application.MODE_PRIVATE);
+        SharedPreferences prefs = application.getSharedPreferences(APP_CORE_DATA, Application.MODE_PRIVATE);
         return prefs.getLong("lastPauseTime", -1L);
     }
 
     public static void updateLastPauseTime() {
-        SharedPreferences prefs = application.getSharedPreferences(ALA_CORE_SHARED_PREFERENCE_DATA, Application.MODE_PRIVATE);
+        SharedPreferences prefs = application.getSharedPreferences(APP_CORE_DATA, Application.MODE_PRIVATE);
         Editor editor = prefs.edit();
         editor.putLong("lastPauseTime", System.currentTimeMillis());
         editor.commit();
@@ -194,7 +161,7 @@ public class AppConfig {
      * ，返回的格式是 yyyy-MM-dd HH:mm:ss
      */
     public static String getFirstLaunchTime() {
-        SharedPreferences prefs = application.getSharedPreferences(ALA_CORE_SHARED_PREFERENCE_DATA, Application.MODE_PRIVATE);
+        SharedPreferences prefs = application.getSharedPreferences(APP_CORE_DATA, Application.MODE_PRIVATE);
         String firstTime = prefs.getString("ft", "");
         if (MiscUtils.isEmpty(firstTime)) {
             firstTime = MiscUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
@@ -206,7 +173,7 @@ public class AppConfig {
     }
 
     public static boolean getTagAlias() {
-        SharedPreferences prefs = application.getSharedPreferences(ALA_CORE_SHARED_PREFERENCE_DATA, Application.MODE_PRIVATE);
+        SharedPreferences prefs = application.getSharedPreferences(APP_CORE_DATA, Application.MODE_PRIVATE);
         boolean state = prefs.getBoolean("tagalias", false);
         return state;
     }
@@ -217,7 +184,7 @@ public class AppConfig {
      * @param state
      */
     public static void setTagAlias(boolean state) {
-        SharedPreferences prefs = application.getSharedPreferences(ALA_CORE_SHARED_PREFERENCE_DATA, Application.MODE_PRIVATE);
+        SharedPreferences prefs = application.getSharedPreferences(APP_CORE_DATA, Application.MODE_PRIVATE);
         Editor editor = prefs.edit();
         editor.putBoolean("tagalias", state);
         editor.commit();
@@ -243,59 +210,33 @@ public class AppConfig {
         return watcher;
     }
 
-    public static void setIsFirstEntrance(boolean isFirstEntrance) {
-        AppConfig.isFirstEntrance = isFirstEntrance;
-    }
-
-    public static boolean getIsFirstEntrance() {
-        return isFirstEntrance;
-    }
-
-//    public static boolean isNewHome() {
-//        return isNewHome;
-//    }
-
-//    public static void setIsNewHome(boolean isNewHome) {
-//        AppConfig.isNewHome = isNewHome;
-//    }
-
-    //是否下载过借贷超人
-    public static void setShowSuperLoan(int showDate) {
-        SharedPreferences prefs = application.getSharedPreferences(ALA_CORE_SHARED_PREFERENCE_DATA, Application.MODE_PRIVATE);
-        Editor editor = prefs.edit();
-        editor.putInt("ShowSuperLoan", showDate);
-        editor.commit();
-    }
-
     public static int getShowSuperLoan() {
-        SharedPreferences prefs = application.getSharedPreferences(ALA_CORE_SHARED_PREFERENCE_DATA, Application.MODE_PRIVATE);
+        SharedPreferences prefs = application.getSharedPreferences(APP_CORE_DATA, Application.MODE_PRIVATE);
         return prefs.getInt("ShowSuperLoan", 0);
     }
 
 
-    //是否下载过借贷超人
     public static void setLong(String key, long value) {
-        SharedPreferences prefs = application.getSharedPreferences(ALA_CORE_SHARED_PREFERENCE_DATA, Application.MODE_PRIVATE);
+        SharedPreferences prefs = application.getSharedPreferences(APP_CORE_DATA, Application.MODE_PRIVATE);
         Editor editor = prefs.edit();
         editor.putLong(key, value);
         editor.commit();
     }
 
     public static long getLong(String key) {
-        SharedPreferences prefs = application.getSharedPreferences(ALA_CORE_SHARED_PREFERENCE_DATA, Application.MODE_PRIVATE);
+        SharedPreferences prefs = application.getSharedPreferences(APP_CORE_DATA, Application.MODE_PRIVATE);
         return prefs.getLong(key, 0L);
     }
 
-    //是否下载过借贷超人
     public static void setBoolean(String key, boolean value) {
-        SharedPreferences prefs = application.getSharedPreferences(ALA_CORE_SHARED_PREFERENCE_DATA, Application.MODE_PRIVATE);
+        SharedPreferences prefs = application.getSharedPreferences(APP_CORE_DATA, Application.MODE_PRIVATE);
         Editor editor = prefs.edit();
         editor.putBoolean(key, value);
         editor.commit();
     }
 
     public static boolean geBoolean(String key) {
-        SharedPreferences prefs = application.getSharedPreferences(ALA_CORE_SHARED_PREFERENCE_DATA, Application.MODE_PRIVATE);
+        SharedPreferences prefs = application.getSharedPreferences(APP_CORE_DATA, Application.MODE_PRIVATE);
         return prefs.getBoolean(key, false);
     }
 }
